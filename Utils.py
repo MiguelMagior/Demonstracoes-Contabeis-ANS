@@ -1,7 +1,10 @@
 import io
 import os
+import re
 import shutil
 from pathlib import Path
+
+import pandas as pd
 from bs4 import BeautifulSoup
 
 import requests
@@ -45,3 +48,31 @@ def download_file(url):
     except Exception as e:
         print(f" Exception - Downloading {url}: {e}")
     return None
+
+def cnpj_is_valid(cnpj):
+    if pd.isna(cnpj):
+        return False
+
+    if len(cnpj) != 14:
+        return False
+    if cnpj == cnpj[0] * 14:
+        return False
+
+    base_digits1 = [5,4,3,2,9,8,7,6,5,4,3,2]
+    base_digits2 = [6] + base_digits1
+
+    total_sum = sum(int(cnpj[i]) * base_digits1[i] for i in range(12))
+    final_digit1 = 11 - (total_sum % 11)
+    if final_digit1 > 9:
+        final_digit1 = 0
+    if final_digit1 != int(cnpj[12]):
+        return False
+
+    total_sum = sum(int(cnpj[i]) * (base_digits2[i]) for i in range(13))
+    final_digit2 = 11 - (total_sum % 11)
+    if final_digit2 > 9:
+        final_digit2 = 0
+    if final_digit2 != int(cnpj[13]):
+        return False
+
+    return True

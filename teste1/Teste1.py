@@ -41,7 +41,7 @@ def process_csv(file):
         quarter, year = extract_date_from_name(file[0])
         data_frame = file[1]
         # filter EVENTOS/SINISTROS
-        data_frame = data_frame[data_frame["DESCRICAO"].str.contains("EVENTOS|SINISTROS", na=False, regex=True)]
+        data_frame = data_frame[data_frame["DESCRICAO"].str.contains(r"eventos|sinistros", na=False, regex=True, case=False)]
         data_frame.drop(columns=["DESCRICAO"], inplace=True)
 
         # correct negative values
@@ -51,14 +51,14 @@ def process_csv(file):
         data_frame["Ano"] = year
 
         data_frame.rename(columns={"VL_SALDO_FINAL": "ValorDespesas"}, inplace=True)
-
+        data_frame.drop_duplicates(inplace=True)
         print(f" Processed {file[0]}")
         return data_frame
     except Exception as e:
         print(f" Exception - Processing CSV: {e}")
     return None
 
-def join_columns(csv_base):
+def merge_csv(csv_base):
     #add CNPJ/RAZAO SOCIAL
     try:
         operators_csv = download_file("https://dadosabertos.ans.gov.br/FTP/PDA/operadoras_de_plano_de_saude_ativas/Relatorio_cadop.csv")
@@ -100,8 +100,9 @@ def main():
     files = [download_file(file) for file in last_three_files]
     csv_files = extract_csv_from_zip(files)
     processed_csvs = [process_csv(file) for file in csv_files]
-    join_columns(concat_csv(processed_csvs)).to_csv("../data/consolidado_despesas.csv", sep=';', encoding='utf-8', index=False)
-
+    concatened_csv = concat_csv(processed_csvs)
+    merged_csv = merge_csv(concatened_csv)
+    merged_csv.to_csv("../data/consolidado_despesas.csv", sep=';', encoding='utf-8', index=False)
     create_zip(file_path="../data/consolidado_despesas.csv", zip_name="consolidado_despesas")
 
 
