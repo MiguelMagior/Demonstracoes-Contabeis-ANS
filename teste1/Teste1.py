@@ -2,7 +2,7 @@ import os
 import re
 import zipfile
 import pandas as pd
-from Utils import create_zip, list_files_http, download_files
+from Utils import create_zip, list_files_http, download_file
 
 
 def extract_csv_from_zip(zip_list):
@@ -12,7 +12,6 @@ def extract_csv_from_zip(zip_list):
             with zipfile.ZipFile(file, 'r') as zip_ref:
                 for csv_file in zip_ref.namelist():
                     with zip_ref.open(csv_file) as f:
-                        # Lê e guarda o DataFrame (não o arquivo)
                         data_frame = pd.read_csv(f,
                                                  sep=';',
                                                  encoding='utf-8',
@@ -21,8 +20,6 @@ def extract_csv_from_zip(zip_list):
                         extracted_data.append((csv_file, data_frame))
 
             print(f" Extracted {csv_file}")
-            file.close()
-            del file
         except Exception as e:
             print(f" Exception - Extracting ZIP file: {e}")
 
@@ -39,12 +36,12 @@ def extract_date_from_name(file_name):
     return None, None
 
 
-def process_csv(csv_file):
+def process_csv(file):
     try:
-        quarter, year = extract_date_from_name(csv_file[0])
-        data_frame = csv_file[1]
+        quarter, year = extract_date_from_name(file[0])
+        data_frame = file[1]
         # filter EVENTOS/SINISTROS
-        data_frame = data_frame[data_frame["DESCRICAO"].str.contains("EVENTOS|SINITROS", na=False, regex=True)]
+        data_frame = data_frame[data_frame["DESCRICAO"].str.contains("EVENTOS|SINISTROS", na=False, regex=True)]
         data_frame.drop(columns=["DESCRICAO"], inplace=True)
 
         # correct negative values
@@ -55,41 +52,57 @@ def process_csv(csv_file):
 
         data_frame.rename(columns={"VL_SALDO_FINAL": "ValorDespesas"}, inplace=True)
 
-        print(f" Processed {csv_file[0]}")
+        print(f" Processed {file[0]}")
         return data_frame
     except Exception as e:
         print(f" Exception - Processing CSV: {e}")
     return None
 
+def join_columns(csv_base):
+    #add CNPJ/RAZAO SOCIAL
+    try:
+        operators_csv = download_file("https://dadosabertos.ans.gov.br/FTP/PDA/operadoras_de_plano_de_saude_ativas/Relatorio_cadop.csv")
+        operators_data = pd.read_csv(operators_csv,
+                    sep=';',
+                    encoding='utf-8',
+                    usecols=["REGISTRO_OPERADORA", "CNPJ", "Razao_Social"],
+                                     dtype={"CNPJ": str})
+        csv_base.rename(columns={"REG_ANS": "REGISTRO_OPERADORA"}, inplace=True)
+        csv_base = csv_base.merge(operators_data, on="REGISTRO_OPERADORA", how="left")
+        csv_base.drop(columns=["REGISTRO_OPERADORA"], inplace=True)
+        csv_base.rename(columns={"Razao_Social": "RazaoSocial"}, inplace=True)
+        csv_base = csv_base[["CNPJ", "RazaoSocial", "Trimestre", "Ano", "ValorDespesas"]]
+    except Exception as e:
+        print(f" Exception - Joining CSV: {e}")
+    return csv_base
+
 
 def concat_csv(data_list):
     data_frames = []
     try:
-        for data in data_list:
-            data_frame = process_csv(data)
-            if not data_frame.empty:
-                data_frames.append(data_frame)
-        if data_frames:
-            return pd.concat(data_frames, ignore_index=True)
+        for data_frame in data_list:
+            data_frames.append(data_frame)
+        return pd.concat(data_frames, ignore_index=True)
     except Exception as e:
         print(f" Exception - Concatenating CSV: {e}")
-    return None
+    return data_frames
 
 
 def main():
     base_url = "https://dadosabertos.ans.gov.br/FTP/PDA/demonstracoes_contabeis/"
-    os.makedirs(os.path.dirname("data"), exist_ok=True)
-    try:
-        directories = list_files_http(base_url)
-        directories.pop()  # remove dictionary
-        last_files_path = directories[-1]
-        last_three_files = list_files_http(last_files_path)[-3:]
-        files = download_files(last_three_files)
-        csv_files = extract_csv_from_zip(files)
-        concat_csv(csv_files).to_csv("../data/consolidado_despesas.csv", sep=';', encoding='utf-8', index=False)
-        create_zip(file_path="../data/consolidado_despesas.csv", zip_name="consolidado_despesas")
-    except Exception as e:
-        print(f" Exception - Main execution: {e}")
+    os.makedirs(os.path.dirname("../data"), exist_ok=True)
+
+    url_list = list_files_http(base_url)
+    url_list.pop()  # remove dictionary
+    last_files_url = url_list[-1]
+    last_three_files = list_files_http(last_files_url)[-3:]
+
+    files = [download_file(file) for file in last_three_files]
+    csv_files = extract_csv_from_zip(files)
+    processed_csvs = [process_csv(file) for file in csv_files]
+    join_columns(concat_csv(processed_csvs)).to_csv("../data/consolidado_despesas.csv", sep=';', encoding='utf-8', index=False)
+
+    create_zip(file_path="../data/consolidado_despesas.csv", zip_name="consolidado_despesas")
 
 
 if __name__ == "__main__":

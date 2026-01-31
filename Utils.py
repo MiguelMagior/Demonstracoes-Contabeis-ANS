@@ -33,19 +33,15 @@ def create_zip(file_path, zip_name, output_dir=".."):
         print(f" Exception - Creating zip: {e}")
 
 
-def download_files(url_list):
-    files = []
-    for url in url_list:
-        try:
-            response = requests.get(url, timeout=30)
-            response.raise_for_status()
+def download_file(url):
+    try:
+        response = requests.get(url, timeout=30)
+        response.raise_for_status()
 
-            downloaded_file_data = io.BytesIO(response.content)  # Tudo de uma vez
+        downloaded_file_data = io.BytesIO(response.content)
 
-            downloaded_file_data.seek(0)
-            files.append(downloaded_file_data)
-            print(f" Downloaded {os.path.basename(url)}")
-
-        except Exception as e:
-            print(f" Exception - Downloading {url}: {e}")
-    return files
+        print(f" Downloaded {os.path.basename(url)}")
+        return downloaded_file_data
+    except Exception as e:
+        print(f" Exception - Downloading {url}: {e}")
+    return None
