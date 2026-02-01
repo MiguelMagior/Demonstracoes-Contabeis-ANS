@@ -1,4 +1,5 @@
 import pandas as pd
+from construct.lib import PRINTABLE
 
 from Utils import cnpj_is_valid, download_file, create_zip
 
@@ -51,8 +52,8 @@ def merge_csv(data_frame):
 
 def group_csv(data_frame):
     try:
-        data_frame["MediaValores"] = data_frame.groupby(["UF", "RazaoSocial", "Trimestre"])["ValorDespesas"].transform("mean").round(2)
-        data_frame["DesvioPadrao"] = data_frame.groupby(["UF", "RazaoSocial", "Trimestre"])["ValorDespesas"].transform("std").round(2)
+        data_frame["MediaValorTrimestral"] = data_frame.groupby(["UF", "RazaoSocial", "Trimestre"])["ValorDespesas"].transform("mean").round(2)
+        data_frame["DesvioPadraoTrimestral"] = data_frame.groupby(["UF", "RazaoSocial", "Trimestre"])["ValorDespesas"].transform("std").round(2)
         grouped_data_frame = data_frame.groupby(
             ["UF", "RazaoSocial", "Trimestre"],
             as_index=False).agg({
@@ -69,11 +70,14 @@ def group_csv(data_frame):
         print(f" Exception - Grouping CSV: {e}")
 
 def main():
-    valid_data = validate_data("../data/consolidado_despesas.csv")
-    merged_data = merge_csv(valid_data)
-    grouped_data = group_csv(merged_data)
-    grouped_data.to_csv("../data/despesas_agregadas.csv", sep=';', encoding='utf-8', index=False)
-    create_zip(file_path="../data/despesas_agregadas.csv", zip_name="Teste_Miguel_Magior.zip")
+    try:
+        valid_data = validate_data("../data/consolidado_despesas.csv")
+        merged_data = merge_csv(valid_data)
+        grouped_data = group_csv(merged_data)
+        grouped_data.to_csv("../data/despesas_agregadas.csv", sep=';', encoding='utf-8', index=False)
+        create_zip(file_path="../data/despesas_agregadas.csv", zip_name="Teste_Miguel_Magior.zip")
+    except Exception as e:
+        print(f" Exception - Creating File: {e}")
 
 if __name__ == "__main__":
     main()
