@@ -61,8 +61,12 @@ def process_csv(file):
 def merge_csv(csv_base):
     #add CNPJ/RAZAO SOCIAL
     try:
-        operators_csv = download_file("https://dadosabertos.ans.gov.br/FTP/PDA/operadoras_de_plano_de_saude_ativas/Relatorio_cadop.csv")
-        operators_data = pd.read_csv(operators_csv,
+        if 'operadoras.csv' not in os.listdir("../data"):
+            operators_csv = download_file(
+                "https://dadosabertos.ans.gov.br/FTP/PDA/operadoras_de_plano_de_saude_ativas/Relatorio_cadop.csv")
+            with open('../data/operadoras.csv', 'wb') as f:
+                f.write(operators_csv.read())
+        operators_data = pd.read_csv('../data/operadoras.csv',
                     sep=';',
                     encoding='utf-8',
                     usecols=["REGISTRO_OPERADORA", "CNPJ", "Razao_Social"],

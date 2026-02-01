@@ -1,5 +1,5 @@
+import os
 import pandas as pd
-from construct.lib import PRINTABLE
 
 from Utils import cnpj_is_valid, download_file, create_zip
 
@@ -35,9 +35,12 @@ def validate_data(csv_path):
 
 def merge_csv(data_frame):
     try:
-        operators_csv = download_file(
-            "https://dadosabertos.ans.gov.br/FTP/PDA/operadoras_de_plano_de_saude_ativas/Relatorio_cadop.csv")
-        operators_data = pd.read_csv(operators_csv,
+        if 'operadoras.csv' not in os.listdir("../data"):
+            operators_csv = download_file(
+                "https://dadosabertos.ans.gov.br/FTP/PDA/operadoras_de_plano_de_saude_ativas/Relatorio_cadop.csv")
+            with open('../data/operadoras.csv', 'wb') as f:
+                f.write(operators_csv.read())
+        operators_data = pd.read_csv('../data/operadoras.csv',
                                      sep=';',
                                      encoding='utf-8',
                                      usecols=["CNPJ", "REGISTRO_OPERADORA", "Modalidade", "UF"],
@@ -52,22 +55,26 @@ def merge_csv(data_frame):
 
 def group_csv(data_frame):
     try:
-        data_frame["MediaValorTrimestral"] = data_frame.groupby(["UF", "RazaoSocial", "Trimestre"])["ValorDespesas"].transform("mean").round(2)
-        data_frame["DesvioPadraoTrimestral"] = data_frame.groupby(["UF", "RazaoSocial", "Trimestre"])["ValorDespesas"].transform("std").round(2)
+        data_frame["MediaValorTrimestral"] = data_frame.groupby(["UF", "RazaoSocial", "Trimestre"])[
+            "ValorDespesas"].transform("mean").round(2)
+        data_frame["DesvioPadraoTrimestral"] = data_frame.groupby(["UF", "RazaoSocial", "Trimestre"])[
+            "ValorDespesas"].transform("std").round(2)
         grouped_data_frame = data_frame.groupby(
             ["UF", "RazaoSocial", "Trimestre"],
             as_index=False).agg({
+            "Ano": "first",
             "CNPJ": "first",
             "RegistroANS": "first",
             "Modalidade": "first",
             "ValorDespesas": "sum",
-            "MediaValores": "first",
-            "DesvioPadrao": "first"
+            "MediaValorTrimestral": "first",
+            "DesvioPadraoTrimestral": "first"
         })
         grouped_data_frame.sort_values('ValorDespesas', ascending=False, inplace=True)
         return grouped_data_frame
     except Exception as e:
         print(f" Exception - Grouping CSV: {e}")
+
 
 def main():
     try:
@@ -75,9 +82,10 @@ def main():
         merged_data = merge_csv(valid_data)
         grouped_data = group_csv(merged_data)
         grouped_data.to_csv("../data/despesas_agregadas.csv", sep=';', encoding='utf-8', index=False)
-        create_zip(file_path="../data/despesas_agregadas.csv", zip_name="Teste_Miguel_Magior.zip")
+        create_zip(file_path="../data/despesas_agregadas.csv", zip_name="Teste_Miguel_Magior")
     except Exception as e:
         print(f" Exception - Creating File: {e}")
+
 
 if __name__ == "__main__":
     main()
