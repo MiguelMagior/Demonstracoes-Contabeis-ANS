@@ -1,4 +1,5 @@
-USE Despesas
+SET GLOBAL local_infile=1;
+USE Despesas;
 
 LOAD DATA LOCAL INFILE 'data/operadoras.csv'
 INTO TABLE Operadoras
@@ -29,7 +30,6 @@ IGNORE 1 ROWS
     regiao_comerc,
     data_registro
 )
--- Limpeza básica
 SET uf = UPPER(TRIM(uf)),
     cep = REPLACE(TRIM(cep), '-', ''),
     cnpj = TRIM(cnpj);
