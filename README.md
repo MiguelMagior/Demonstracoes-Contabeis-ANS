@@ -10,3 +10,13 @@ Gera um arquivo CSV final contendo as colunas:
   - Trimeste e Ano
   - ValorDespesas: valores tratados como decimais positivos
 
+Teste 2
+Validação dos dados gerados no Teste 1:
+  - CNPJ não nulo e válido
+  - Valores numéricos positivos e não nulos
+  - Razão Social não nulo
+Registros com valores inválidos são direcionados a um arquivo CSV de quarentena. Isso proporciona a melhor qualidade e confiabilidade do conjunto de dados sem a exclusão permanente dessas entradas, permitindo seu tratamento futuro. O custo dessa solução é o armazenamento desses dados em disco, que necessitarão de um novo fluxo de processamento no sistema.
+Após a validação ocorre a adição das colunas de Número de Registro da ANS, Modalidade da Operadora e sua UF. As linhas então são agrupadas por Razão Social, UF e Trimestre de modo a permitir o cálculo de novas colunas de:
+  - Total de despesas da operado por trimestre (odenadas de maneira decrescente)
+  - Média de custo por trimestre
+  - Desvio padrão das despesas
