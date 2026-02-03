@@ -95,7 +95,7 @@ def concat_csv(data_list):
 def main():
     try:
         base_url = "https://dadosabertos.ans.gov.br/FTP/PDA/demonstracoes_contabeis/"
-        os.makedirs(os.path.dirname("../data"), exist_ok=True)
+        os.makedirs(os.path.dirname("data"), exist_ok=True)
 
         url_list = list_files_http(base_url)
         url_list.pop()  # remove dictionary
