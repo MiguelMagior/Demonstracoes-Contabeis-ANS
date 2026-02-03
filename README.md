@@ -6,9 +6,9 @@ Versão 1.0
 - MySQL
 - Vue.js
 
-##Requisitos
+## Requisitos
 
-##Teste 1 - Integração com API Pública 
+## Teste 1 - Integração com API Pública 
 Script em Python que baixa os arquivos de Demonstrações Contábeis dos últimos 3 semetres disponibilizados pela ANS por meio de solicitações HTTP.
 Os arquivos são armazenados, extraidos e processados em memória a fim de evitar operações de I/O. Esses processos no momento são realizados de maneira incremental, com a possibilidade de ser implementado processos assíncronos no futuro para melhor desempenho e velocidade.
 Gera um arquivo CSV final de Despesas Consolidadas contendo as colunas:
@@ -16,7 +16,7 @@ Gera um arquivo CSV final de Despesas Consolidadas contendo as colunas:
   - Trimeste e Ano: obtidos pelo nome do arquivo de entrada;
   - ValorDespesas: valores tratados como decimais positivos.
 
-##Teste 2 - Transformação e Validação de Dados
+## Teste 2 - Transformação e Validação de Dados
 Script para validação e processamento dos dados gerados no Teste 1:
   - CNPJ não vazio e válido;
   - Valores numéricos positivos e não nulos;
@@ -28,9 +28,9 @@ Após a validação ocorre a adição das colunas de Número de Registro da ANS,
   - Desvio padrão dessas despesas.
 Gera um arquivo CSV final de Despesas Agregadas com todos os dados obtidos em ambos os testes.
 
-##Teste 3 - Banco de dados
+## Teste 3 - Banco de dados
 Scripts SQL compatível com MySQL para a criação de tabelas, importação e consulta dos dados obtidos nos testes anteriores.
-###Criação de tabelas:
+### Criação de tabelas:
 Queries DDL seguindo uma abordagem de semi-normalização dos dados, de modo a evitar sua repetição desnecessária sem comprometer a eficiência das consultas ou aumentando a complexidade da arquitetura.
   - Dados cadatrais das operadoras - contêm todos os dados disponibilizados no CSV de Operadoras;
   - Dados consolidados e agregados de Despesas - possuem dados referentes ao seu período e valores, com chave estrangeira para a operadora correspondente
@@ -38,19 +38,19 @@ Não são permitidos valores NULL em atributos utilizados em operações de cons
 Criação de índices para otimização de consultas.
 Dados monetários foram tratados como DECIMAL para melhor precisão durante os cálculos.
 Datas completa foram armazenadas como DATE enquanto anos foram armazenados como YEAR, preservando sua semântica.
-###Importação dos dados dos arquivos:
+### Importação dos dados dos arquivos:
 Queries para popular a base de dados com os dados importados dos arquivos CSVs.
 Esses dados foram previamente tratados nos outros processos, evitando valores null em campos obrigatórios.
 Strings em campos numéricos e datas são convertidos pela linguagem.
-###Queries Analíticas:
+### Queries Analíticas:
 Foram desenvolvidas as seguintes consultas:
   - As 5 operadoras com maior crescimento percentual entre o primeiro e o último trimestre - é obtido utilizando os valores apenas das operadoras que possuem valores no primeiro e último semestre da análise;
   - As 5 UF com maiores valores de despesas totais junto a sua média gasta por operadora;
   - Quantas operadoras tiveram despesas acima da média geral em pelo menos 2 trimestres - é calculado a média geral de cada trimestre e então adicionadas em uma tabela auxiliar as operadoras que tiveram despesas acima desse valor para cada trimestre. Ao final, as operadoras que tiveram duas ou mais entradas na tabela são adicionadas a contagem.
 
-##Teste 4 - API e Interface Web
+## Teste 4 - API e Interface Web
 Criação de API com back-end em Python/FastAPI e interface front-end web com Vue.js.
-###Back-end
+### Back-end
 A API possui as seguintes rotas:
 `GET /api/operadoras` - listar todas as operadoras com paginação;
 `GET /api/operadoras/{cnpj}` - retornar detalhes de uma operadora específica;
@@ -62,7 +62,7 @@ A estratégia de paginação adotada foi a de Offset-based, por ser atender adeq
 A rota de estatísticas, no momento atual, é calculada a cada requisição, de modo a simplificar sua implementação inicial, atendendo aos requisitos do sistema considerando o baixo fluxo de acesso e o volume de dados. Espera-se que, por se tratarem de dados com praticamente nenhuma atualização, esses valores sejam futuramente pré-calculados e armazenados no servidor.
 As respostas da API são compostas pelos seu dados e metadados, de modo a facilitar sua legibilidade e seu uso dentro do front-end.
 
-###Front-end
+### Front-end
 Como estratégia de Busca e Filtro foi escolhida a opção de Busca no Servidor, uma vez que o front-end trabalha com dados paginados e não possui acesso à base completa. Dentro do escopo do projeto, essa decisão não trouxe impactos negativos à experiência do usuário.
 Estados de carregamento são representados visualmente ao usuários durante requisições de modo a oferecer um 
 Para o gerenciamento de estado foi adotada a utilização de props e eventos simples por se tratar de uma aplicação de pequeno porte e complexidade, mantendo o código simples e de fácil leitura.
