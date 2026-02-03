@@ -1,0 +1,303 @@
+{
+  "info": {
+    "_postman_id": "47896029-dfd8-492b-84e6-6c3b72467bb3",
+    "name": "Demonstrações Contábeis - ANS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51479401",
+    "_collection_link": "https://go.postman.co/collection/51479401-47896029-dfd8-492b-84e6-6c3b72467bb3?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Listar Operadoras",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/operadoras?page=1&limit=10&search",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "operadoras"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Número da Página"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Itens por página"
+            },
+            {
+              "key": "search",
+              "value": null,
+              "description": "Procurar por CNPJ/Razão Social\n"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Listar Operadoras",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/operadoras?page=1&limit=10&search",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "operadoras"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Número da Página"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Itens por página"
+                },
+                {
+                  "key": "search",
+                  "value": null,
+                  "description": "Procurar por CNPJ/Razão Social\n"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Tue, 03 Feb 2026 19:47:24 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "943"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"data\": [\n        {\n            \"razao_social\": \"18 DE JULHO ADMINISTRADORA DE BENEFÍCIOS LTDA\",\n            \"cnpj\": \"19541931000125\"\n        },\n        {\n            \"razao_social\": \"2B ODONTOLOGIA OPERADORA DE PLANOS ODONTOLÓGICOS LTDA\",\n            \"cnpj\": \"22869997000153\"\n        },\n        {\n            \"razao_social\": \"2CARE OPERADORA DE SAÚDE LTDA.\",\n            \"cnpj\": \"27452545000195\"\n        },\n        {\n            \"razao_social\": \"A.P.S. ADMINISTRADORA DE BENEFÍCOS LTDA.\",\n            \"cnpj\": \"13138885000131\"\n        },\n        {\n            \"razao_social\": \"ABERTTA SAÚDE - ASSOCIAÇÃO BENEFICENTE DOS EMPREGADOS DA ARCELORMITTAL NO BRASIL\",\n            \"cnpj\": \"17505793000101\"\n        },\n        {\n            \"razao_social\": \"ABPLUS ADMINISTRADORA DE BENEFÍCIOS LTDA.\",\n            \"cnpj\": \"17687511000126\"\n        },\n        {\n            \"razao_social\": \"AD SALUTE ADMINISTRADORA DE BENEFÍCIOS LTDA\",\n            \"cnpj\": \"10458298000131\"\n        },\n        {\n            \"razao_social\": \"ADC ADMINISTRADORA DE BENEFICIOS LTDA\",\n            \"cnpj\": \"58280182000181\"\n        },\n        {\n            \"razao_social\": \"ADM LIFE - ADMINISTRADORA DE BENEFÍCIOS LTDA.\",\n            \"cnpj\": \"28315826000169\"\n        },\n        {\n            \"razao_social\": \"ADMSERV BENEFÍCIOS E SERVIÇOS LTDA\",\n            \"cnpj\": \"07867825000157\"\n        }\n    ],\n    \"total\": 1109,\n    \"page\": 1,\n    \"limit\": 10\n}"
+        }
+      ]
+    },
+    {
+      "name": "Buscar Operadora por CNPJ",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/operadoras/19541931000125",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "operadoras",
+            "19541931000125"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Buscar Operadora por CNPJ",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/operadoras/19541931000125",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "operadoras",
+                "19541931000125"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Tue, 03 Feb 2026 19:47:56 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "562"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"nome_fantasia\": \"\",\n    \"complemento\": \"\",\n    \"data_registro\": \"2015-05-19\",\n    \"modalidade\": \"Administradora de Benefícios\",\n    \"bairro\": \"PRAÇA DA BANDEIRA\",\n    \"ddd\": \"32\",\n    \"cidade\": \"Além Paraíba\",\n    \"telefone\": \"34624649\",\n    \"uf\": \"MG\",\n    \"fax\": \"\",\n    \"cep\": \"36660000\",\n    \"registro_ans\": \"419761\",\n    \"email\": \"contabilidade@cbnassessoria.com.br\",\n    \"representante\": \"LUIZ HENRIQUE MARENDINO GONÇALVES\",\n    \"cnpj\": \"19541931000125\",\n    \"logradouro\": \"RUA CAPITÃO MEDEIROS DE REZENDE\",\n    \"cargo_rep\": \"SÓCIO ADMINISTRADOR\",\n    \"razao_social\": \"18 DE JULHO ADMINISTRADORA DE BENEFÍCIOS LTDA\",\n    \"numero\": \"274\",\n    \"regiao_comerc\": 6\n}"
+        }
+      ]
+    },
+    {
+      "name": "Listar Despesas por Operadora",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/operadoras/27452545000195/despesas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "operadoras",
+            "27452545000195",
+            "despesas"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Listar Despesas por Operadora",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/operadoras/27452545000195/despesas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "operadoras",
+                "27452545000195",
+                "despesas"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Tue, 03 Feb 2026 19:48:03 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "6659"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"valor\": 697142.15,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20305,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 11196731.84,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20306,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 303267.21,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20307,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 184384.2,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20308,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 100055.35,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20309,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 3539.23,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20310,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 15288.43,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20311,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 520650.4,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20312,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 4850.57,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20313,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 542273.59,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20314,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 46616,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20315,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 39501.79,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20316,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 330300.31,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20317,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 23916.66,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20764,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 37214.69,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20765,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 139942.69,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20786,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 0,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20787,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 1116423.83,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20788,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 14677691.02,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20789,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 61558843.68,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20812,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 61228543.37,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20813,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 60365123.97,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20814,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 20171954.41,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20815,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 32709294.96,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 1,\n        \"id\": 20816,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 125788780.44,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33840,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 124596726.54,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33841,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 122824222.77,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33842,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 42901204.19,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33843,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 65397757.79,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33844,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 1628585.44,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33845,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 23363297.96,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33846,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 572994.91,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33847,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 339123.68,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33848,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 196092.3,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33849,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 4265.18,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33850,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 34403.75,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33851,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 1157393.27,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33852,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 40710.57,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33853,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 1199147.32,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33854,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 107756.6,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33855,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 42115.59,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33856,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 1192053.9,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 33857,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 142556.49,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 34009,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 1182004.34,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 34010,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 15539444.61,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 34011,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 0,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 34118,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 27683.79,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 34360,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 44531.97,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 2,\n        \"id\": 34361,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 41320.99,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81328,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 61625.14,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81329,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 253221.38,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81330,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 66738.86,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81331,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 186482.52,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81332,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 962617.66,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81333,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 9501749.59,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81439,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 9285439.59,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81440,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 216310,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81441,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 189193948.95,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81901,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 194039590.07,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81902,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 176088390.96,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81903,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 60175594.97,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81904,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 91965011.29,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81905,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 2616864.91,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81906,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 36754710.32,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81907,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 6582.54,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81908,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 847506.01,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81909,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 498980.52,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81910,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 290855.36,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81911,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 5272.93,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81912,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 53287.2,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81913,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 15155032.16,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81914,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 5903712.34,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81915,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 7926112.26,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81916,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 392610.3,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81917,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 2099452.64,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81918,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 1750898.53,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81919,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 47876.55,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81920,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 1832583.45,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81921,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 141016.95,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81922,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 197762.41,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81923,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 213674.37,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81924,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 4845641.12,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 81925,\n        \"ano\": 2025\n    },\n    {\n        \"valor\": 5061951.12,\n        \"cnpj\": \"27452545000195\",\n        \"trimestre\": 3,\n        \"id\": 82058,\n        \"ano\": 2025\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Estatísticas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/estatisticas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "estatisticas"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Estatísticas",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/estatisticas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "estatisticas"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Tue, 03 Feb 2026 19:48:09 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "1785"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"soma_geral\": 2261113054166.38,\n    \"media_geral\": 1066562761.4,\n    \"despesas_por_uf\": [\n        {\n            \"uf\": \"RJ\",\n            \"total\": 618540231774.43\n        },\n        {\n            \"uf\": \"SP\",\n            \"total\": 781841131201.85\n        },\n        {\n            \"uf\": \"CE\",\n            \"total\": 129872683009.25\n        },\n        {\n            \"uf\": \"DF\",\n            \"total\": 131662515474.44\n        },\n        {\n            \"uf\": \"MG\",\n            \"total\": 123401569776.13\n        },\n        {\n            \"uf\": \"RS\",\n            \"total\": 74826276403.58\n        },\n        {\n            \"uf\": \"PR\",\n            \"total\": 136540255868.73\n        },\n        {\n            \"uf\": \"GO\",\n            \"total\": 44198055681.71\n        },\n        {\n            \"uf\": \"ES\",\n            \"total\": 38058556903.29\n        },\n        {\n            \"uf\": \"PE\",\n            \"total\": 23295453051.14\n        },\n        {\n            \"uf\": \"PA\",\n            \"total\": 13103809880.87\n        },\n        {\n            \"uf\": \"SC\",\n            \"total\": 44644367019.52\n        },\n        {\n            \"uf\": \"MT\",\n            \"total\": 17737289989.11\n        },\n        {\n            \"uf\": \"PI\",\n            \"total\": 12795294583\n        },\n        {\n            \"uf\": \"RN\",\n            \"total\": 8585672783.37\n        },\n        {\n            \"uf\": \"PB\",\n            \"total\": 10114499881.17\n        },\n        {\n            \"uf\": \"AL\",\n            \"total\": 8746460445.51\n        },\n        {\n            \"uf\": \"MS\",\n            \"total\": 15490544010.01\n        },\n        {\n            \"uf\": \"SE\",\n            \"total\": 5134210151.32\n        },\n        {\n            \"uf\": \"AM\",\n            \"total\": 4680005900.3\n        },\n        {\n            \"uf\": \"RO\",\n            \"total\": 4147646208.4\n        },\n        {\n            \"uf\": \"BA\",\n            \"total\": 9212711315.59\n        },\n        {\n            \"uf\": \"MA\",\n            \"total\": 1285734404.94\n        },\n        {\n            \"uf\": \"AC\",\n            \"total\": 1354142498.57\n        },\n        {\n            \"uf\": \"TO\",\n            \"total\": 1822019978.75\n        },\n        {\n            \"uf\": \"AP\",\n            \"total\": 21915971.4\n        }\n    ],\n    \"top_5_operadoras\": [\n        {\n            \"cnpj\": \"92693118000160\",\n            \"razao_social\": \"BRADESCO SAÚDE S.A.\",\n            \"uf\": \"RJ\",\n            \"total_despesas\": 275138611603.78,\n            \"media_valor_despesa\": 91712870534.59\n        },\n        {\n            \"cnpj\": \"01685053000156\",\n            \"razao_social\": \"SUL AMERICA COMPANHIA DE SEGURO SAÚDE\",\n            \"uf\": \"RJ\",\n            \"total_despesas\": 224309895979.87,\n            \"media_valor_despesa\": 74769965326.62\n        },\n        {\n            \"cnpj\": \"29309127000179\",\n            \"razao_social\": \"AMIL ASSISTÊNCIA MÉDICA INTERNACIONAL S.A.\",\n            \"uf\": \"SP\",\n            \"total_despesas\": 195219227505.81,\n            \"media_valor_despesa\": 65073075835.27\n        },\n        {\n            \"cnpj\": \"63554067000198\",\n            \"razao_social\": \"HAPVIDA ASSISTENCIA MEDICA S.A.\",\n            \"uf\": \"CE\",\n            \"total_despesas\": 86907317067.68,\n            \"media_valor_despesa\": 28969105689.23\n        },\n        {\n            \"cnpj\": \"44649812000138\",\n            \"razao_social\": \"NOTRE DAME INTERMÉDICA SAÚDE S.A.\",\n            \"uf\": \"SP\",\n            \"total_despesas\": 85327045658.16,\n            \"media_valor_despesa\": 28442348552.72\n        }\n    ]\n}"
+        }
+      ]
+    }
+  ]
+}

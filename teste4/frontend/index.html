@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Operadoras de Saúde</title>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div id="app">
+    <h1>Operadoras de Saúde</h1>
+
+    <input
+            v-model="search"
+            placeholder="Buscar por razão social ou CNPJ"
+    />
+
+    <p v-if="loading">Carregando...</p>
+    <p v-if="error" class="error">{{ error }}</p>
+
+    <table v-if="companies.length">
+        <thead>
+        <tr>
+            <th>CNPJ</th>
+            <th>Razão Social</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="company in companies" :key="company.cnpj">
+            <td>{{ company.cnpj }}</td>
+            <td>{{ company.razao_social }}</td>
+            <td>
+                <a :href="`details.html?cnpj=${company.cnpj}`">
+                    <button>Detalhes</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <p v-if="!loading && !companies.length">
+        Nenhuma operadora encontrada
+    </p>
+
+    <div class="pagination">
+        <button @click="prevPage" :disabled="page === 1">
+            Anterior
+        </button>
+
+        <span>Pagina {{ page }}</span>
+
+        <button @click="nextPage">
+            Proxima
+        </button>
+    </div>
+
+    <h2>Despesas por Estado (UF)</h2>
+
+    <canvas id="expensesChart" width="400" height="200"></canvas>
+    <script src="app.js"></script>
+</div>
+
+</body>
+</html>

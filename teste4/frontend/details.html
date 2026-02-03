@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Operator Details</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <div id="app">
+    <h1>Detalhes da Operadora</h1>
+
+    <p>CNPJ:</p>{{ company.cnpj }}
+    <p>Razão Social: </p>{{ company.razao_social }}
+    <p>UF: </p>{{ company.uf }}
+
+    <h2>Historico de despesas</h2>
+
+    <p v-if="loading">Carregando...</p>
+
+    <table v-if="expenses.length">
+        <tr>
+          <th>Ano</th>
+          <th>Trimestre</th>
+          <th>Valor</th>
+        </tr>
+        <tr v-for="exp in expenses" :key="exp.id">
+          <td>{{ exp.ano }}</td>
+          <td>{{ exp.trimestre }}</td>
+          <td>{{ formatCurrency(exp.valor) }}</td>
+        </tr>
+    </table>
+
+    <p v-if="!loading && !expenses.length">
+      Nenhuma despesa encontrada
+    </p>
+
+    <br>
+    <a href="index.html">
+      <button>Voltar</button>
+    </a>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="details.js"></script>
+</body>
+</html>
