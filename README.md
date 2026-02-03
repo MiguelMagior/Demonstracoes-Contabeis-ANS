@@ -1,45 +1,74 @@
-# Demonstracoes-Contabeis-ANS
-Tecnologias
-- Python
-- MySQL 
+# Demonstrações Contábeis - Agência Nacional de Saúde Suplementar
+Versão 1.0
 
-Teste 1
-Baixa os arquivos de Demonstrações Contábeis dos últimos 3 semetres disponibilizados pela ANS por meio de solicitações HTTP.
+##Tecnologias
+- Python 
+- MySQL
+- Vue.js
+
+## Requisitos
+
+## Teste 1 - Integração com API Pública 
+Script em Python que baixa os arquivos de Demonstrações Contábeis dos últimos 3 semetres disponibilizados pela ANS por meio de solicitações HTTP.
 Os arquivos são armazenados, extraidos e processados em memória a fim de evitar operações de I/O. Esses processos no momento são realizados de maneira incremental, com a possibilidade de ser implementado processos assíncronos no futuro para melhor desempenho e velocidade.
-Gera um arquivo CSV final contendo as colunas:
-  - CNPJ e Razão Social: obtidas pelo join com a tabela de Operadoras de Plano de Saúde Ativas da ANS
-  - Trimeste e Ano
-  - ValorDespesas: valores tratados como decimais positivos
+Gera um arquivo CSV final de Despesas Consolidadas contendo as colunas:
+  - CNPJ e Razão Social: obtidas pelo join com a tabela de Operadoras de Plano de Saúde Ativas da ANS;
+  - Trimeste e Ano: obtidos pelo nome do arquivo de entrada;
+  - ValorDespesas: valores tratados como decimais positivos.
 
-Teste 2
-Validação dos dados gerados no Teste 1:
-  - CNPJ não nulo e válido
-  - Valores numéricos positivos e não nulos
-  - Razão Social não nulo
-Registros com valores inválidos são direcionados a um arquivo CSV de quarentena. Isso proporciona a melhor qualidade e confiabilidade do conjunto de dados sem a exclusão permanente dessas entradas, permitindo seu tratamento futuro. O custo dessa solução é o armazenamento desses dados em disco, que necessitarão de um novo fluxo de processamento no sistema.
-Após a validação ocorre a adição das colunas de Número de Registro da ANS, Modalidade da Operadora e sua UF. As linhas então são agrupadas por Razão Social, UF e Trimestre de modo a permitir o cálculo de novas colunas de:
-  - Total de despesas da operado por trimestre (odenadas de maneira decrescente)
-  - Média de custo por trimestre
-  - Desvio padrão das despesas
+## Teste 2 - Transformação e Validação de Dados
+Script para validação e processamento dos dados gerados no Teste 1:
+  - CNPJ não vazio e válido;
+  - Valores numéricos positivos e não nulos;
+  - Razão Social não vazio.
+Registros com dados inválidos são direcionados a um arquivo CSV de quarentena. Isso proporciona a melhor qualidade e confiabilidade do conjunto de dados sem a exclusão permanente das entradas invalidadas, permitindo seu tratamento futuro. Essa solução gera o custo de armazenamento desses dados em disco, que necessitarão de um novo fluxo de processamento no sistema.
+Após a validação ocorre a adição das colunas de Número de Registro da ANS, Modalidade da Operadora e sua UF por meio de um novo join com a tabela de Operadoras. As linhas então são agrupadas por Razão Social, UF e Trimestre de modo a permitir o cálculo de novas colunas de:
+  - Total de despesas da operado por trimestre (odenadas de maneira decrescente);
+  - Média de custo por trimestre;
+  - Desvio padrão dessas despesas.
+Gera um arquivo CSV final de Despesas Agregadas com todos os dados obtidos em ambos os testes.
 
-Teste 3
-Scripts SQL para execução de tarefas
-- Criação de tabelas:
-  Semi-normalização das tabelas de modo a evitar a repetição de dados na base de dados porém sem perder eficiência ou aumentando a complexidade da arquitetura
-  - Dados cadatrais das operadoras - contem todos os dados disponibilizados no CSV
-  - Dados consolidados e agregados de Despesas - possuem dados referentes ao periodo e valores, com chave estrangeira para sua operadora
-  Não são permitidos valores NULL em atributos utilizados nas demais queries
-  Criação de indices para otimização de consultas
-  Dados monetários foram tratados como DECIMAL para melhor precisão durante os cálculos.
-  Datas inteiras foram armazenadas como DATE enquanto anos foram armazenados como YEAR, preservando seus valores específicos.
-- Importação dos dados dos arquivos:
-  Popular automaticamente a base de dados com os dados contidos nos CSVs
-  Entradas com valores NULL em campos obrigatórios foram movidas previamente para a quarentena
-  Strings foram convertidos para valores numéricos
-- Queries Analíticas:
-  - As 5 operadoras com maior crescimento percentual entre o primeiro e o último trimestre - é feita a verificação de quais operadoras possuem valores em ambos trimestre por meio de um join
-  - As 5 UF com maiores valores de despesas totais junto a sua média gasta por operadora
-  - Quantas operadoras tiveram despesas acima da média geral em pelo menos 2 trimestres - é calculado a média geral de cada trimestre e então adicionadas em uma tabela auxiliar as operadoras que tiveram despesas acima desse valor para cada trimestre. Ao final, as operadoras que tiveram duas ou mais entradas na tabela são adicionadas a contagem
+## Teste 3 - Banco de dados
+Scripts SQL compatível com MySQL para a criação de tabelas, importação e consulta dos dados obtidos nos testes anteriores.
+### Criação de tabelas:
+Queries DDL seguindo uma abordagem de semi-normalização dos dados, de modo a evitar sua repetição desnecessária sem comprometer a eficiência das consultas ou aumentando a complexidade da arquitetura.
+  - Dados cadatrais das operadoras - contêm todos os dados disponibilizados no CSV de Operadoras;
+  - Dados consolidados e agregados de Despesas - possuem dados referentes ao seu período e valores, com chave estrangeira para a operadora correspondente
+Não são permitidos valores NULL em atributos utilizados em operações de consulta.
+Criação de índices para otimização de consultas.
+Dados monetários foram tratados como DECIMAL para melhor precisão durante os cálculos.
+Datas completa foram armazenadas como DATE enquanto anos foram armazenados como YEAR, preservando sua semântica.
+### Importação dos dados dos arquivos:
+Queries para popular a base de dados com os dados importados dos arquivos CSVs.
+Esses dados foram previamente tratados nos outros processos, evitando valores null em campos obrigatórios.
+Strings em campos numéricos e datas são convertidos pela linguagem.
+### Queries Analíticas:
+Foram desenvolvidas as seguintes consultas:
+  - As 5 operadoras com maior crescimento percentual entre o primeiro e o último trimestre - é obtido utilizando os valores apenas das operadoras que possuem valores no primeiro e último semestre da análise;
+  - As 5 UF com maiores valores de despesas totais junto a sua média gasta por operadora;
+  - Quantas operadoras tiveram despesas acima da média geral em pelo menos 2 trimestres - é calculado a média geral de cada trimestre e então adicionadas em uma tabela auxiliar as operadoras que tiveram despesas acima desse valor para cada trimestre. Ao final, as operadoras que tiveram duas ou mais entradas na tabela são adicionadas a contagem.
 
-Teste 4
-    
+## Teste 4 - API e Interface Web
+Criação de API com back-end em Python/FastAPI e interface front-end web com Vue.js.
+### Back-end
+A API possui as seguintes rotas:
+`GET /api/operadoras` - listar todas as operadoras com paginação;
+`GET /api/operadoras/{cnpj}` - retornar detalhes de uma operadora específica;
+`GET /api/operadoras/{cnpj}/despesas` - retornar histórico de despesas de um operadora específica;
+`GET /api/estatisticas` - retornar estatísticas agregadas(total de despesas, média, top 5 operadoras).
+
+Foi escolhido o FastAPI por ser um framework moderno focado no desenvolvimento de APIs REST, que oferece uma boa performance e documentação automática. Por conta do pequeno escopo deste projeto, sua implementação foi simples e garante uma fácil leitura e manutenibilidade do código.
+A estratégia de paginação adotada foi a de Offset-based, por ser atender adequadamente o volume de dados do projeto de maneira satisfátoria sem adicionar complexidade desnecessária ao projeto.
+A rota de estatísticas, no momento atual, é calculada a cada requisição, de modo a simplificar sua implementação inicial, atendendo aos requisitos do sistema considerando o baixo fluxo de acesso e o volume de dados. Espera-se que, por se tratarem de dados com praticamente nenhuma atualização, esses valores sejam futuramente pré-calculados e armazenados no servidor.
+As respostas da API são compostas pelos seu dados e metadados, de modo a facilitar sua legibilidade e seu uso dentro do front-end.
+
+### Front-end
+Como estratégia de Busca e Filtro foi escolhida a opção de Busca no Servidor, uma vez que o front-end trabalha com dados paginados e não possui acesso à base completa. Dentro do escopo do projeto, essa decisão não trouxe impactos negativos à experiência do usuário.
+Estados de carregamento são representados visualmente ao usuários durante requisições de modo a oferecer um 
+Para o gerenciamento de estado foi adotada a utilização de props e eventos simples por se tratar de uma aplicação de pequeno porte e complexidade, mantendo o código simples e de fácil leitura.
+Erros são tratados por meio de captura de exceções, mostrando mensagens genéricas ao usuário enquanto registra os detalhes técnicos no console. Assim é evitado mostrar detalhes internos do sistema ao cliente.
+Estados de loading oferecem um indicar visual ao usuário de modo a evitar a sensação de travamento da página e melhorar sua experiência.
+Dados vazios retornam uma mensagem informativa ao usuário indicando que a requisição foi bem-sucedida mas não retornou resultados.
+
+POSTMAN
+
