@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import func, desc
+from sqlalchemy import func, desc, or_
 from database import get_db
 from models import Operadora, DespesaConsolidada, DespesaAgregada
 
@@ -19,9 +19,10 @@ def home():
 
 # Route 1: list all companies (pagination)
 @app.get("/api/operadoras")
-def list_operadoras(
+def list_companies(
         page: int = Query(1, ge=1, description="Número da página"),
         limit: int = Query(10, ge=1, le=100, description="Itens por página"),
+        search: str | None = Query(None, description="Procurar por CNPK/Razao Social"),
         db: Session = Depends(get_db)
 ):
     try:
@@ -33,7 +34,15 @@ def list_operadoras(
         )
         total = query.count()
 
-        operadoras = query \
+        if search:
+            query = query.filter(
+                or_(
+                    Operadora.razao_social.like(f"%{search}%"),
+                    Operadora.cnpj.like(f"%{search}%")
+                )
+            )
+
+        companies = query \
             .order_by(Operadora.razao_social) \
             .offset(offset) \
             .limit(limit) \
@@ -44,7 +53,7 @@ def list_operadoras(
                 "razao_social": op.razao_social,
                 "cnpj": op.cnpj,
             }
-            for op in operadoras
+            for op in companies
         ]
 
         return {
@@ -59,37 +68,37 @@ def list_operadoras(
 
 # Route 2: search company by CNPJ
 @app.get("/api/operadoras/{cnpj}")
-def search_operadora(
+def search_company(
         cnpj: str,
         db: Session = Depends(get_db)):
     try:
-        operadora = (db.query(Operadora)
+        company = (db.query(Operadora)
                      .filter(Operadora.cnpj == cnpj)
                      .first())
-        if not operadora:
+        if not company:
             raise HTTPException(status_code=404, detail="Operadora não encontrada")
 
-        return operadora
+        return company
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 # Route 3: company expenses
 @app.get("/api/operadoras/{cnpj}/despesas")
-def lits_despesas_operadora(
+def list_expenses_from_company(
         cnpj: str,
         db: Session = Depends(get_db)
 ):
     try:
-        operadora = db.query(Operadora).filter(Operadora.cnpj == cnpj).first()
-        if not operadora:
+        company = db.query(Operadora).filter(Operadora.cnpj == cnpj).first()
+        if not company:
             raise HTTPException(status_code=404, detail="Operadora não encontrada")
 
-        despesas = (db.query(DespesaConsolidada)
+        expenses = (db.query(DespesaConsolidada)
                     .filter(DespesaConsolidada.cnpj == cnpj)
                     .all())
 
-        return despesas
+        return expenses
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -99,34 +108,51 @@ def lits_despesas_operadora(
 def list_statistics(db: Session = Depends(get_db)):
     try:
         stats = db.query(
-            func.sum(DespesaAgregada.valor).label("soma_total"),
-            func.round(func.avg(DespesaAgregada.valor), 2).label("media_geral"),
-        )
+            func.sum(DespesaAgregada.valor).label("general_sum"),
+            func.round(func.avg(DespesaAgregada.valor), 2).label("general_average"),
+        ).one()
 
         top5 = (db.query(
             DespesaAgregada.cnpj,
             Operadora.razao_social,
-            func.sum(DespesaAgregada.valor).label("valor_total"),
-            func.round(func.avg(DespesaAgregada.valor), 2).label("media")
+            Operadora.uf,
+            func.sum(DespesaAgregada.valor).label("total_op"),
+            func.round(func.avg(DespesaAgregada.valor), 2).label("average_op")
         ).join(
             Operadora, DespesaAgregada.cnpj == Operadora.cnpj
         ).group_by(DespesaAgregada.cnpj)
-                .order_by(desc("valor_total"))
+                .order_by(desc("total_op"))
                 .limit(5)
                 .all())
 
-        soma_total = stats[0].soma_total
-        media_geral = stats[0].media_geral
+        expenses_by_uf = (
+            db.query(
+                Operadora.uf,
+                func.sum(DespesaAgregada.valor).label("total")
+            )
+            .join(Operadora, Operadora.cnpj == DespesaAgregada.cnpj)
+            .group_by(Operadora.uf)
+            .all()
+        )
 
         return {
-            "soma_total": soma_total,
-            "media_geral": media_geral,
+            "soma_geral": stats.general_sum,
+            "media_geral": stats.general_average,
+            "despesas_por_uf": [
+                {
+                    "uf": item.uf,
+                    "total": float(item.total)
+                }
+                for item in expenses_by_uf
+            ],
+
             "top_5_operadoras": [
                 {
                     "cnpj": item.cnpj,
                     "razao_social": item.razao_social,
-                    "total_despesas": item.valor_total,
-                    "media_valor_despesa": item.media,
+                    "uf": item.uf,
+                    "total_despesas": item.total_op,
+                    "media_valor_despesa": item.average_op,
                 }
                 for item in top5]
         }

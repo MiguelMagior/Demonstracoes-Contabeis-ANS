@@ -10,7 +10,7 @@ CREATE TABLE Operadoras(
     modalidade VARCHAR(50),
     ddd char(2),
     telefone CHAR(9),
-    fax CHAR(11),
+    fax CHAR(9),
     email VARCHAR(100),
     logradouro VARCHAR(50),
     numero VARCHAR(10),
