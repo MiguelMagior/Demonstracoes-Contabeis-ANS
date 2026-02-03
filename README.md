@@ -65,7 +65,7 @@ Dados monetários foram tratados como DECIMAL para melhor precisão durante os c
 Datas completa foram armazenadas como DATE enquanto anos foram armazenados como YEAR, preservando sua semântica.  
 Criar tabelas:  
 ```
-mysql -u root -o < teste3/setup.sql
+mysql -u root -p < teste3/setup.sql
 ```
 
 ### Importação dos dados dos arquivos:
@@ -74,7 +74,7 @@ Esses dados foram previamente tratados nos outros processos, evitando valores nu
 Strings em campos numéricos e datas são convertidos pela linguagem.  
 Popular base de dados:  
 ```
-mysql -u root -o < teste3/load_data.sql
+mysql -u root -p --local-infile=1 < teste3/load_data.sql
 ```
 
 ### Queries Analíticas:
