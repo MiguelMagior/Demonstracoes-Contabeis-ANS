@@ -1,7 +1,8 @@
 # Demonstracoes-Contabeis-ANS
 Tecnologias
 - Python
-- MySQL 
+- MySQL
+- Vue.js
 
 Teste 1
 Baixa os arquivos de Demonstrações Contábeis dos últimos 3 semetres disponibilizados pela ANS por meio de solicitações HTTP.
@@ -42,4 +43,14 @@ Scripts SQL para execução de tarefas
   - Quantas operadoras tiveram despesas acima da média geral em pelo menos 2 trimestres - é calculado a média geral de cada trimestre e então adicionadas em uma tabela auxiliar as operadoras que tiveram despesas acima desse valor para cada trimestre. Ao final, as operadoras que tiveram duas ou mais entradas na tabela são adicionadas a contagem
 
 Teste 4
-    
+Criação de API com back-end em Python/FastAPI e interface front-end web com Vue.js.
+Foi escolhido o FastAPI por ser um framework moderno focado no desenvolvimento de APIs REST, que oferece uma boa performance e documentação automática. Por conta do pequeno escopo deste projeto, sua implementação foi simples e garante uma fácil leitura e manutenibilidade do código.
+A estratégia de paginação adotada foi a de Offset-based, por ser atender adequadamente o volume de dados do projeto de maneira satisfátoria sem adicionar complexidade desnecessária ao projeto.
+A rota de estatísticas, no momento atual, é calculada a cada requisição, de modo a simplificar sua implementação inicial, atendendo aos requisitos do sistema considerando o baixo fluxo de acesso e o volume de dados. Espera-se que, por se tratarem de dados com praticamente nenhuma atualização, esses valores sejam futuramente pré-calculados e armazenados no servidor.
+As respostas da API são compostas pelos seu dados e metadados, de modo a facilitar sua legibilidade e seu uso dentro do front-end.
+Para busca/filtragem de dados foi tomada a estratégia de busca no servidor
+Servidor possui as rotas:
+- GET /api/operadoras
+- GET /api/operadoras/{cnpj}
+- GET /api/operadoras/{cnpj}/despesas
+- GET /api/estatisticas
