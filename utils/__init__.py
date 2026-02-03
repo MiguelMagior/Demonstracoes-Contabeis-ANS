@@ -1,12 +1,9 @@
 import io
 import os
-import re
 import shutil
 from pathlib import Path
-
 import pandas as pd
 from bs4 import BeautifulSoup
-
 import requests
 
 
@@ -20,7 +17,7 @@ def list_files_http(base_url):
                 href = link.get('href')
                 files.append(base_url + href)
         except Exception as e:
-            print(f" Exception - {e}")
+            print(f" Exceção: {e}")
     return files
 
 
@@ -31,9 +28,10 @@ def create_zip(file_path, zip_name, output_dir=".."):
     try:
         shutil.make_archive(base_name=str(Path(output_dir) / zip_name),
                             format='zip',
-                            base_dir=file_path)
+                            base_dir=file_path,
+                            )
     except Exception as e:
-        print(f" Exception - Creating zip: {e}")
+        print(f" Exceção - Criando arquivo zip: {e}")
 
 
 def download_file(url):
@@ -43,10 +41,10 @@ def download_file(url):
 
         downloaded_file_data = io.BytesIO(response.content)
 
-        print(f" Downloaded {os.path.basename(url)}")
+        print(f" Download: {os.path.basename(url)}")
         return downloaded_file_data
     except Exception as e:
-        print(f" Exception - Downloading {url}: {e}")
+        print(f" Exceção - Baixando {url}: {e}")
     return None
 
 def cnpj_is_valid(cnpj):

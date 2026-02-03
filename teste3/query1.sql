@@ -1,4 +1,6 @@
 -- TOP 5 COMPANIES WITH THE HIGHEST PERCENTAGE GROWTH IN EXPENSES AMONG THE FIRST AND LAST QUARTER
+USE Despesas;
+
 SET @first_year = (SELECT MIN(ano) FROM DespesasConsolidadas);
 SET @first_quarter = (SELECT MIN(trimestre) FROM DespesasConsolidadas WHERE ano = @first_year);
 SET @last_year = (SELECT MAX(ano) FROM DespesasConsolidadas);

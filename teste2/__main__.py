@@ -1,8 +1,6 @@
 import os
-
 import pandas as pd
-
-from Utils import cnpj_is_valid, download_file, create_zip
+from utils import cnpj_is_valid, download_file, create_zip
 
 
 def validate_data(csv_path):
@@ -27,7 +25,7 @@ def validate_data(csv_path):
         valid_data = consolidated_csv[mask_valid]
         invalid_data = consolidated_csv[~mask_valid]
 
-        invalid_data.to_csv("../data/quarentena_invalidos.csv", sep=';', encoding='utf-8', index=False)
+        invalid_data.to_csv("data/quarentena_invalidos.csv", sep=';', encoding='utf-8', index=False)
 
         print(f" Quarentena: {len(invalid_data)} entradas movidas")
         return valid_data
@@ -39,12 +37,12 @@ def validate_data(csv_path):
 
 def merge_csv(data_frame):
     try:
-        if 'operadoras.csv' not in os.listdir("../data"):
+        if 'operadoras.csv' not in os.listdir("data"):
             companies_csv = download_file(
                 "https://dadosabertos.ans.gov.br/FTP/PDA/operadoras_de_plano_de_saude_ativas/Relatorio_cadop.csv")
-            with open('../data/operadoras.csv', 'wb') as f:
+            with open('data/operadoras.csv', 'wb') as f:
                 f.write(companies_csv.read())
-        companies_data = pd.read_csv('../data/operadoras.csv',
+        companies_data = pd.read_csv('data/operadoras.csv',
                                      sep=';',
                                      encoding='utf-8',
                                      usecols=["CNPJ", "REGISTRO_OPERADORA", "Modalidade", "UF"],
@@ -82,14 +80,14 @@ def group_csv(data_frame):
 
 def main():
     try:
-        valid_data = validate_data("../data/consolidado_despesas.csv")
+        valid_data = validate_data("data/consolidado_despesas.csv")
         merged_data = merge_csv(valid_data)
         grouped_data = group_csv(merged_data)
-        grouped_data.to_csv("../data/despesas_agregadas.csv", sep=';', encoding='utf-8', index=False)
-        create_zip(file_path="../data/despesas_agregadas.csv", zip_name="Teste_Miguel_Magior")
+        grouped_data.to_csv("data/despesas_agregadas.csv", sep=';', encoding='utf-8', index=False)
+        create_zip(file_path="data/despesas_agregadas.csv", zip_name="Teste_Miguel_Magior")
         print(f" Criado ZIP: Teste_Miguel_Magior.zip")
     except Exception as e:
-        print(f" Exception - Creating File: {e}")
+        print(f" Exceção - Criando Arquivo: {e}")
 
 
 if __name__ == "__main__":

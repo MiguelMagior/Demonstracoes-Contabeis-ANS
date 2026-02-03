@@ -1,4 +1,6 @@
 -- TOP 5 STATES WITH HIGHEST EXPENSES
+USE Despesas;
+
 SELECT
     o.uf as "UF",
     FORMAT(SUM(d.valor), 2, 'de_DE') as "Total Despesas($)",

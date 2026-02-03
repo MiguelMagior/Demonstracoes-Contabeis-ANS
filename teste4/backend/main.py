@@ -1,15 +1,14 @@
 from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import func, desc, or_
-from database import get_db
-from models import Operadora, DespesaConsolidada, DespesaAgregada
+from .database import get_db
+from .models import Operadora, DespesaConsolidada, DespesaAgregada
 
 app = FastAPI(
     title="API Demonstrações Contábeis ANS",
     description="API para consulta de operadoras de saúde disponibilizados pela Agência Nacional de Saúde Suplementar",
     version="1.0.0"
 )
-
 
 # Test Route
 @app.get("/")
@@ -22,7 +21,7 @@ def home():
 def list_companies(
         page: int = Query(1, ge=1, description="Número da página"),
         limit: int = Query(10, ge=1, le=100, description="Itens por página"),
-        search: str | None = Query(None, description="Procurar por CNPK/Razao Social"),
+        search: str | None = Query(None, description="Procurar por CNPJ/Razao Social"),
         db: Session = Depends(get_db)
 ):
     try:
@@ -63,7 +62,10 @@ def list_companies(
             "limit": limit
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(
+            status_code=500,
+            detail="Erro ao listar operadoras"
+        )
 
 
 # Route 2: search company by CNPJ
@@ -71,16 +73,13 @@ def list_companies(
 def search_company(
         cnpj: str,
         db: Session = Depends(get_db)):
-    try:
-        company = (db.query(Operadora)
-                     .filter(Operadora.cnpj == cnpj)
-                     .first())
-        if not company:
-            raise HTTPException(status_code=404, detail="Operadora não encontrada")
+    company = (db.query(Operadora)
+               .filter(Operadora.cnpj == cnpj)
+               .first())
+    if not company:
+        raise HTTPException(status_code=404, detail="Operadora não encontrada")
 
-        return company
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return company
 
 
 # Route 3: company expenses
@@ -89,18 +88,15 @@ def list_expenses_from_company(
         cnpj: str,
         db: Session = Depends(get_db)
 ):
-    try:
-        company = db.query(Operadora).filter(Operadora.cnpj == cnpj).first()
-        if not company:
-            raise HTTPException(status_code=404, detail="Operadora não encontrada")
+    company = db.query(Operadora).filter(Operadora.cnpj == cnpj).first()
+    if not company:
+        raise HTTPException(status_code=404, detail="Operadora não encontrada")
 
-        expenses = (db.query(DespesaConsolidada)
-                    .filter(DespesaConsolidada.cnpj == cnpj)
-                    .all())
+    expenses = (db.query(DespesaConsolidada)
+                .filter(DespesaConsolidada.cnpj == cnpj)
+                .all())
 
-        return expenses
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return expenses
 
 
 # Route 4: statistics
@@ -157,4 +153,7 @@ def list_statistics(db: Session = Depends(get_db)):
                 for item in top5]
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(
+            status_code=500,
+            detail="Erro ao gerar estatísticas"
+        )

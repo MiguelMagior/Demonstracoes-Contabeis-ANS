@@ -1,4 +1,6 @@
 -- QUANTITY OF COMPANIES WITH AT LEAST 2 QUARTERLY EXPENSES ABOVE THE AVERAGE
+USE Despesas;
+
 WITH QuarterAverage AS (
     SELECT
         trimestre,

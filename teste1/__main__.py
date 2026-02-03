@@ -2,7 +2,7 @@ import os
 import re
 import zipfile
 import pandas as pd
-from Utils import create_zip, list_files_http, download_file
+from utils import create_zip, list_files_http, download_file
 
 
 def extract_csv_from_zip(zip_list):
@@ -61,12 +61,12 @@ def process_csv(file):
 def merge_csv(csv_base):
     #add CNPJ/RAZAO SOCIAL
     try:
-        if 'operadoras.csv' not in os.listdir("../data"):
+        if 'operadoras.csv' not in os.listdir("data"):
             companies_csv = download_file(
                 "https://dadosabertos.ans.gov.br/FTP/PDA/operadoras_de_plano_de_saude_ativas/Relatorio_cadop.csv")
-            with open('../data/operadoras.csv', 'wb') as f:
+            with open('data/operadoras.csv', 'wb') as f:
                 f.write(companies_csv.read())
-        companies_data = pd.read_csv('../data/operadoras.csv',
+        companies_data = pd.read_csv('data/operadoras.csv',
                     sep=';',
                     encoding='utf-8',
                     usecols=["REGISTRO_OPERADORA", "CNPJ", "Razao_Social"],
@@ -107,8 +107,8 @@ def main():
         processed_csvs = [process_csv(file) for file in csv_files]
         concatened_csv = concat_csv(processed_csvs)
         merged_csv = merge_csv(concatened_csv)
-        merged_csv.to_csv("../data/consolidado_despesas.csv", sep=';', encoding='utf-8', index=False)
-        create_zip(file_path="../data/consolidado_despesas.csv", zip_name="consolidado_despesas")
+        merged_csv.to_csv("data/consolidado_despesas.csv", sep=';', encoding='utf-8', index=False)
+        create_zip(file_path="data/consolidado_despesas.csv", zip_name="consolidado_despesas")
         print(f" Criado ZIP: Consolidado_despesas.zip")
     except Exception as e:
         print(f" Exceção - Criando arquivo: {e}")
